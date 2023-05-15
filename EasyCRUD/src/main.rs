@@ -16,10 +16,12 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(
                 web::scope("/api")
-                    .route("/executeSQL", web::get().to(api::executeSQL::executeSQL))
+                    .route("/executeSQL", web::post().to(api::executeSQL::executeSQL))
+                    .route("/selectDB", web::post().to(api::executeSQL::selectDatabase))
                     .route("/login", web::post().to(api::login::login))
-                .route("/login", web::get().to(ui::login::login))
             )
+            .route("/login", web::get().to(ui::login::login))
+            .route("/login.js", web::get().to(ui::login::loginJS))
             .wrap(SessionMiddleware::new(CookieSessionStore::default(), secret_key.clone()))
     })
     .bind(("127.0.0.1", 8080))?

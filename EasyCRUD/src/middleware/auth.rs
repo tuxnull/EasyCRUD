@@ -1,6 +1,6 @@
 use actix_session::Session;
 use config::Config;
-use mysql::*;
+use sqlx::{MySqlPool, Connection};
 use crate::middleware::settings::getConfig;
 
 pub fn checkSessionAuth(session: Session) -> bool {
@@ -18,7 +18,7 @@ pub fn checkSessionAuth(session: Session) -> bool {
     true
 }
 
-pub fn checkSQLAuth(username: String, password: String) -> bool {
+pub async fn checkSQLAuth(username: String, password: String) -> bool {
 
     let settings = getConfig();
 
@@ -28,14 +28,9 @@ pub fn checkSQLAuth(username: String, password: String) -> bool {
     let url_strng = format!("mysql://{}:{}@{}:{}", username, password, host, port);
     let url = url_strng.as_str();
 
-    let pool = match Pool::new(url){
-        Ok(pool) => pool,
-        Err(_) => return false
-    };
-
-    let mut conn = match pool.get_conn(){
+    let conn = match MySqlPool::connect(url).await {
         Ok(conn) => conn,
-        Err(_) => return false
+        _ => return false
     };
 
     true

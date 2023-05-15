@@ -15,7 +15,7 @@ pub async fn login(session: Session, form: web::Form<LoginData>) -> impl Respond
     let username = form.username.clone();
     let password = form.password.clone();
 
-    if !checkSQLAuth(username, password) {
+    if !checkSQLAuth(username, password).await {
         println!("SQL authentication failed!");
         return HttpResponse::Unauthorized().body("SQL Connection failed");
     }
