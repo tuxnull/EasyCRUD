@@ -1,4 +1,4 @@
-use config::{Config, ConfigError};
+use config::{Config};
 
 pub fn getConfig() -> Config{
     let settings = Config::builder()

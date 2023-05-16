@@ -1,4 +1,4 @@
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{web, HttpResponse, Responder};
 use actix_session::Session;
 use serde::Deserialize;
 use crate::middleware::auth::checkSQLAuth;

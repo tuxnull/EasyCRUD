@@ -1,6 +1,5 @@
 use actix_session::Session;
-use config::Config;
-use sqlx::{MySqlPool, Connection};
+use sqlx::{MySqlPool};
 use crate::middleware::settings::getConfig;
 
 pub fn checkSessionAuth(session: Session) -> bool {
