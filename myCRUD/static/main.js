@@ -13,7 +13,23 @@ function addQueryAlert(alert, severity = "warning"){
 
 }
 
+function setLoadBar(state){
+    let load_bar = document.getElementById("load_bar");
+    let load_bar_prog = document.getElementById("load_bar_progress");
+    if(state){
+        load_bar.style = "height: 2px; position: fixed; bottom: 1px; left: 0; width: 100vw;";
+        load_bar_prog.classList.add("progress-bar-striped");
+        load_bar_prog.classList.add("progress-bar-animated");
+        load_bar_prog.style="width: 100vw";
+    } else {
+        load_bar.style = "display: none;";
+        load_bar_prog.style="width: 0vw";
+    }
+
+}
+
 function executeSQLInView(query){
+    setLoadBar(true);
     let query_textbox = document.getElementById("query_input");
     let table = document.getElementById("data_table");
     let query_info = document.getElementById("query_info");
@@ -39,10 +55,12 @@ function executeSQLInView(query){
             }
             table.innerHTML = html;
             query_textbox.value = query;
+            setLoadBar(false);
         } catch (e) {
             console.log(e);
             console.log(res_obj);
             addQueryAlert(res_obj.response, "danger");
+            setLoadBar(false);
         }
     });
 }
@@ -84,6 +102,7 @@ function postAsync(url, data, callback) {
 // ------
 
 function loadDatabases(){
+    setLoadBar(true);
     executeSQL("SHOW DATABASES", function(response){
         let databases = JSON.parse(response);
         
@@ -114,6 +133,7 @@ function loadDatabases(){
 
             database_list.appendChild(database_obj);
         }
+        setLoadBar(false);
     });
 }
 
@@ -122,6 +142,8 @@ function loadTables(database){
     if(document.getElementById("collapse-" + database) !== null){
         return;
     }
+
+    setLoadBar(true);
 
     executeSQL("SHOW TABLES FROM " + database, function(response){
         let tables = JSON.parse(response);
@@ -153,6 +175,7 @@ function loadTables(database){
             table_list.appendChild(table_obj);
         }
 
+        setLoadBar(false);
     });
 }
 
