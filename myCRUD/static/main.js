@@ -1,7 +1,6 @@
 
 function addQueryAlert(alert, severity = "warning"){
     let query_alerts = document.getElementById("alert_field");
-    
     let alert_elm = document.createElement("div");
     alert_elm.className = "alert alert-"+severity+" alert-dismissible fade show";
     alert_elm.setAttribute("role", "alert");
@@ -20,7 +19,12 @@ function executeSQLInView(query){
     let query_info = document.getElementById("query_info");
     executeSQL(query, function(response, res_obj){
         try{
-            let data = JSON.parse(response);
+            let data = {"0": ["No data returned."]};
+            query_info.innerHTML = "Query executed successfully. ";
+            if(res_obj.response != "[]"){
+                data = JSON.parse(response);
+                query_info.innerHTML = "Query executed successfully. " + (data.length - 1) + " rows returned.";
+            }
             let html = "<thead><tr>";
             for(i = 0; i < data[0].length; i++){
                 html += "<th>" + data[0][i] + "</th>";
