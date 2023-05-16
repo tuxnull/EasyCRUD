@@ -1,13 +1,9 @@
-use std::{iter::Map, collections::HashMap};
-
-use actix_web::{web, App, HttpResponse, HttpServer, Responder};
+use actix_web::{web, HttpResponse, Responder};
 use actix_session::Session;
-use mysql_common::Value;
-use sqlx::{MySqlConnection, Connection, Row, Column, mysql::{MySqlRow, MySqlPoolOptions}, ValueRef, Executor, mysql::MySqlValueRef, MySqlPool};
+use sqlx::{Row, Column, ValueRef, Executor, MySqlPool};
 use crate::middleware::{auth::checkSessionAuth, settings::getConfig};
 use serde::Deserialize;
-use futures::{TryStreamExt, StreamExt};
-use std::fmt::Display;
+use futures::{TryStreamExt};
 
 #[derive(Deserialize)]
 pub struct SQLData {
@@ -40,12 +36,13 @@ pub async fn executeSQL(session: Session, form: web::Form<SQLData>) -> impl Resp
 
     let url_strng = format!("mysql://{}:{}@{}:{}/{}", username, password, host, port, database);
 
-    let mut conn = MySqlPool::connect(url_strng.as_str()).await.unwrap();
+    let conn = MySqlPool::connect(url_strng.as_str()).await.unwrap();
 
     let query = form.query.clone();
 
 
     let mut cursor = conn.fetch(query.as_str());
+    
 
     let mut row_count = 0;
     let mut data= Vec::new();
@@ -55,6 +52,7 @@ pub async fn executeSQL(session: Session, form: web::Form<SQLData>) -> impl Resp
 
         let row = match cursor.try_next().await{
             Ok(row) => row,
+            Err(e) => return HttpResponse::InternalServerError().body(format!("Query Execution Error: {}", e)),
             _ => break
         };
 
