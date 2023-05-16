@@ -1,6 +1,6 @@
 FROM rust:latest
-WORKDIR /usr/src/easycrud.rs
-RUN git clone https://github.com/tuxnull/EasyCRUD.rs.git
-RUN cd EasyCRUD.rs/EasyCRUD
+WORKDIR /usr/src/mycrud
+RUN git clone https://github.com/tuxnull/myCRUD.git
+RUN cd myCRUD/myCRUD
 RUN cargo build --release
-CMD ["./target/release/easycrud"]
+CMD ["./target/release/mycrud"]
