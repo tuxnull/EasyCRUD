@@ -1,6 +1,6 @@
 # EasyCRUD.rs
 
-!(https://patrick.garske.link/projects/EasyCRUD.jpg "EasyCRUD User Interface")
+![EasyCRUD User Interface](https://patrick.garske.link/projects/EasyCRUD.jpg "EasyCRUD User Interface")
 
 A Super Lightweight RUST-based CRUD System for managing MySQL Databases
 
