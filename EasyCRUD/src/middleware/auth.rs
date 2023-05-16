@@ -7,12 +7,18 @@ pub fn checkSessionAuth(session: Session) -> bool {
 
     let uname = match session.get::<String>("username") {
         Ok(Some(uname)) => uname,
-        _ => return false
+        _ => {
+            println!("Username not set in session!"); 
+            return false
+        }
     };
 
     let upass = match session.get::<String>("password") {
         Ok(Some(upass)) => upass,
-        _ => return false
+        _ => {
+            println!("Password not set in session!"); 
+            return false
+        }
     };
     
     true

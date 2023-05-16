@@ -20,6 +20,10 @@ async fn main() -> std::io::Result<()> {
                     .route("/selectDB", web::post().to(api::executeSQL::selectDatabase))
                     .route("/login", web::post().to(api::login::login))
             )
+            .route("/", web::get().to(ui::index::index))
+            .route("/index", web::get().to(ui::index::index))
+            .route("/main.js", web::get().to(ui::index::indexJS))
+            
             .route("/login", web::get().to(ui::login::login))
             .route("/login.js", web::get().to(ui::login::loginJS))
             .wrap(SessionMiddleware::new(CookieSessionStore::default(), secret_key.clone()))

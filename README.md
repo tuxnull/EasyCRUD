@@ -1,4 +1,4 @@
 # EasyCRUD.rs
-Rust-based CRUD Web Interface
+A Super Lightweight RUST-based CRUD System for managing MySQL Databases
 
-Please do not use this in production. This is a learning project for me to learn Rust.
+Work in Progress!! The User Interface has not been implemented yet!
